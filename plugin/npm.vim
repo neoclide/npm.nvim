@@ -13,7 +13,8 @@ let did_npm_nvim_loaded = 1
 let g:npm_view_fields = get(g:, 'npm_view_fields',
       \['author','repository.url','version','description','homepage','license'])
 let g:npm_project_folders = get(g:, 'npm_project_folders', [])
-
+let g:npm_parsefunc_command = get(g:, 'npm_parsefunc_command',
+      \expand('<sfile>:p:h:h').'/node_modules/.bin/parsefunc')
 
 function! s:encodeURIComponent(str)
   let s = ''

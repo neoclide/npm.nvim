@@ -63,7 +63,7 @@ class Source(Base):
         root = context['__root']
         args = dict(enumerate(context['args']))
         t = args.get(0, '')
-        cmds = ['parsefunc']
+        cmds = [self.vim.eval('g:npm_parsefunc_command')]
         curpath = os.path.normpath(self.vim.call('expand', '%:p'))
         relpath = os.path.relpath(curpath, root)
         if t == 't':

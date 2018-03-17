@@ -71,6 +71,9 @@ VARIABLES 					 	*npm-variables*
 		
 		let g:npm_project_folders = ['~/nodejs-dev']
 <
+*g:npm_parsefunc_command*
+
+	Default: `$PLUGIN_DIR/node_modules/.bin/parsefunc`
 
 ==============================================================================
 COMMANDS 					 	*npm-commands*
