@@ -1,0 +1,195 @@
+*npm.txt*					Plugin for manage npm.
+
+Version: 0.1
+Author:  Qiming Zhao <chemzqm at gmail.com>
+License: MIT license
+Neovim version: > 0.2.2
+
+CONTENTS						*npm-contents*
+
+Introduction		|npm-introduction|
+Requirement 		|npm-requirement|
+Install			|npm-install|
+Variables 		|npm-variables|
+Commands 		|npm-commands|
+Denite 			|npm-denite|
+  actions 		|denite-action-npm|
+  npm 			|denite-source-npm|
+  npm/used 			|denite-source-npm-used|
+  npm/outdated 			|denite-source-npm-outdated|
+  npm/dev 			|denite-source-npm-dev|
+Changelog 		|npm-changelog|
+Feedback 		|npm-feedback|
+
+==============================================================================
+INTRODUCTION						*npm-introduction*
+
+Npm.nvim provide commands for easier run npm commands in nvim terminal and
+alose provide some useful sources for manage npm modules using |denite|
+interface.
+
+==============================================================================
+REQUIREMENT 					 	*npm-requirement*
+
+Npm.nvim using node provider so requires neovim version > 0.2.2, use
+`:version` to check. To make node provider works, you need to install neovim
+global npm package by: >
+
+    npm install -g neovim
+
+And run `:UpdateRemotePlugins` to check the provider works as expect.
+
+To make |denite.nvim| works, your neovim needs python3 support, make sure you
+have "echo has('python3')" reutrn 1 in your nvim.
+
+==============================================================================
+INSTALL 					 	*npm-install*
+
+Denite.nvim is required to provide consistent interface for manage packages.
+
+Take [vim-plug](https://github.com/junegunn/vim-plug) for example, add: >
+
+    Plug 'Shougo/denite.nvim'
+    Plug 'neoclide/npm.nvim'
+
+To your .vimrc and run "PlugInstall" after vim restarted.
+
+Run "UpdateRemotePlugins" command after denite.nvim installed.
+
+==============================================================================
+VARIABLES 					 	*npm-variables*
+
+*g:npm_view_fields*
+	Fields for command `npm view`, default: >
+
+		author repository.url version description homepage license
+<
+
+*g:npm_project_folders*
+
+	Project folders of your local npm packages. eg: >
+		
+		let g:npm_project_folders = ['~/nodejs-dev']
+<
+
+==============================================================================
+COMMANDS 					 	*npm-commands*
+
+							*:NpmRun*
+
+:NpmRun [script]
+
+	Run command npm run script in terminal buffer, use tab to complte
+	buffer name, if [script] is omitted, a default script would be
+	find from 'start', 'dev', 'watch'
+
+							*:NpmInstall*
+
+:NpmInstall [arguments]
+
+	Run npm install command with arguments in terminal buffer.
+
+							*:NpmSearch*
+
+:NpmSearch [query]
+
+	Search npm package in browser with [query].
+
+:NpmOutdated
+
+	Run npm outdated and show result in denite buffer.
+
+:NpmDev
+
+	Run `Denite npm/dev`
+
+==============================================================================
+DENITE 						 	*npm-denite*
+
+------------------------------------------------------------------------------
+
+ACTIONS 						*denite-action-npm*
+
+All denite sources provided by npm.nvim shares some same actions:
+
+	[open] 		Run `:Denite file_rec` of selected module,
+			default action.
+
+	[tabopen] 	Open selected module directory in new iTerm2 tab.
+			(Mac only)
+
+	[help] 		Open Readme.md file of selected module.
+
+	[preview] 	Run npm view command in terminal buffer.
+
+	[browser] 	Open module in default browser.
+
+
+------------------------------------------------------------------------------
+SOURCE NPM 						*denite-source-npm*
+
+npm 	 	Manage npm packages of current projects.
+
+		Actions:
+
+		[update] 	Run `npm update` for selected module(s)
+
+		[delete] 	Run `npm uninstall` for selected module(s)
+
+		[find] 		Open `Denite func:m:[name]` buffer to filter
+				module function
+
+------------------------------------------------------------------------------
+SOURCE NPM USED 				*denite-source-npm-used*
+
+npm/used 	Manage ever used npm modules.
+		
+		Actions:
+
+		[install] 	Default action, install selected package(s)
+		to current project
+
+------------------------------------------------------------------------------
+SOURCE NPM OUTDATED 				*denite-source-npm-outdated*
+
+npm/outdated 	Manage outdated modules of current project, this source should
+		be opend by command `NpmOutdated`
+
+		Arguments:
+				First arugment should be a file that contains
+				results from `npm outdated`, 
+		
+		Actions:
+
+		[update] 	Defautl action, update to latest that satified
+				by semver
+
+		[upgrade] 	Upgrade to latest tag in npm
+
+		[diff] 		Show diff in browser if possible
+
+------------------------------------------------------------------------------
+SOURCE NPM DEV 					*denite-source-npm-dev*
+
+npm/dev 	Manage local developing npm modules.
+
+		Actions:
+		
+		Defautl actions, see |denite-action-npm|
+
+==============================================================================
+CHANGELOG 						 *npm-changelog*
+
+0.1 	Mar 17, 2018
+
+	- init 
+
+==============================================================================
+FEEDBACK 						 *npm-feedback*
+
+For feedback, visit https://github.com/neoclide/npm.nvim/issues.
+
+Pull requrests are welcome.
+
+==============================================================================
+vim:tw=78:ts=8:ft=help:norl:noet:fen:
