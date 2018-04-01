@@ -40,6 +40,17 @@ function! s:NpmInstall(...)
   call npm#run(cmd, cwd, function('Callback', [cmd]), v:true)
 endfunction
 
+function! s:YarnAdd(...)
+  let cmd = 'yarn add '.join(a:000, ' ')
+  function! Callback(cmd, succeed)
+    if a:succeed
+      echohl MoreMsg | echon a:cmd . ' succeed' | echohl None
+    endif
+  endfunction
+  let cwd = fnamemodify(findfile('package.json', '.;'), ':p:h')
+  call npm#run(cmd, cwd, function('Callback', [cmd]), v:true)
+endfunction
+
 function! s:NpmRun(name)
   if empty(a:name)
     let keys = keys(NpmScripts())
@@ -92,6 +103,7 @@ endfunction
 
 command! -nargs=? -complete=custom,s:ListScripts NpmRun :call s:NpmRun(<q-args>)
 command! -nargs=0 NpmDev :Denite npm/dev
+command! -nargs=* YarnAdd :call s:YarnAdd(<f-args>)
 command! -nargs=0 NpmOutdated :call s:NpmOutdated()
 command! -nargs=* NpmInstall :call s:NpmInstall(<f-args>)
 command! -nargs=1 NpmSearch :call s:NpmSearch(<q-args>)

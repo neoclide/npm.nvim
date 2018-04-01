@@ -30,6 +30,11 @@ For detail, see `:h npm.txt`
 
 ## Installation
 
+Firsly, copy file `rplugin/python3/denite/kind/npm.py` to `denite.nvim/rplugin/python3/denite/kind/npm.py`,
+since denite doesn't support custom kind in separate plugins.
+
 Take [vim-plug](https://github.com/junegunn/vim-plug) for example:
 
     Plug 'neoclide/npm.nvim' {'do' : 'npm install'}
+
+Run command `:UpdateRemotePlugins` to regist this remote plugin if needed.
