@@ -51,8 +51,13 @@ function! s:YarnAdd(...)
   call npm#run(cmd, cwd, function('Callback', [cmd]), v:true)
 endfunction
 
+let s:bufnr = 0
 function! s:NpmRun(name)
   if empty(a:name)
+    if s:bufnr && buflisted(s:bufnr)
+      call npm#reopen(s:bufnr)
+      return
+    endif
     let keys = keys(NpmScripts())
     for str in ['start', 'dev', 'watch']
       if index(keys, str) >= 0
@@ -70,8 +75,9 @@ function! s:NpmRun(name)
   let cmd = 'npm run '.name
   let cwd = fnamemodify(findfile('package.json', '.;'), ':p:h')
   function! Callback(cmd, succeed)
+    let s:bufnr = 0
   endfunction
-  call npm#run(cmd, cwd, function('Callback', [cmd]), v:true)
+  let s:bufnr = npm#run(cmd, cwd, funcref('Callback', [cmd]), v:true)
 endfunction
 
 function! s:NpmSearch(args)

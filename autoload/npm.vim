@@ -8,10 +8,12 @@ endfunction
 function! npm#run(cmd, cwd, callback, auto_close)
   let old_cwd = getcwd()
   execute 'lcd ' . a:cwd
+  let bufnr = 0
   if exists('*termopen')
     execute 'belowright 5new'
     setl winfixheight
     setl norelativenumber
+    let bufnr = bufnr('%')
     call termopen(a:cmd, {
           \ 'on_exit': function('s:onExit'),
           \ 'buffer_nr': bufnr('%'),
@@ -24,6 +26,16 @@ function! npm#run(cmd, cwd, callback, auto_close)
     execute '!'.a:cmd
   endif
   execute 'lcd ' . old_cwd
+  return bufnr
+endfunction
+
+function! npm#reopen(bufnr)
+  execute 'belowright 5new'
+  setl winfixheight
+  setl norelativenumber
+  execute 'buffer '.a:bufnr
+  execute 'normal! G'
+  execute 'wincmd p'
 endfunction
 
 function! npm#run_command(cmd, ...)
