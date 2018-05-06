@@ -1,8 +1,11 @@
+let s:timer_map = {}
+
 function! s:onExit(job_id, status, event) dict
   if a:status == 0 && self.auto_close
     execute 'silent! bd! '.self.buffer_nr
   endif
   call self.callback(a:status == 0)
+  call remove(s:timer_map, self.cmd)
 endfunction
 
 function! npm#run(cmd, cwd, callback, auto_close)
@@ -16,9 +19,12 @@ function! npm#run(cmd, cwd, callback, auto_close)
     let bufnr = bufnr('%')
     call termopen(a:cmd, {
           \ 'on_exit': function('s:onExit'),
+          \ 'on_stdout': function('s:onData'),
+          \ 'on_stderr': function('s:onData'),
           \ 'buffer_nr': bufnr('%'),
           \ 'callback': a:callback,
-          \ 'auto_close': a:auto_close
+          \ 'auto_close': a:auto_close,
+          \ 'cmd': a:cmd,
           \})
     execute 'normal! G'
     execute 'wincmd p'
@@ -27,6 +33,23 @@ function! npm#run(cmd, cwd, callback, auto_close)
   endif
   execute 'lcd ' . old_cwd
   return bufnr
+endfunction
+
+function! s:onData(...) dict
+  let tid = get(s:timer_map, self.cmd, 0)
+  if tid | call timer_stop(tid) | endif
+  let nr = self.buffer_nr
+  let s:timer_map[self.cmd] = timer_start(200, { -> call(function('s:ScrollBottom'), [nr])})
+endfunction
+
+function! s:ScrollBottom(nr)
+  let wnr = bufwinnr(a:nr)
+  if wnr == -1 | return | endif
+  if wnr == bufwinnr('%') | return | endif
+  execute wnr . "wincmd w"
+  execute 'normal! G'
+  let g:y = 1
+  wincmd p
 endfunction
 
 function! npm#reopen(bufnr)
