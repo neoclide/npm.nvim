@@ -6,21 +6,6 @@ import path from 'path'
 @Plugin({ dev: !!process.env.NVIM_NODE_HOST_DEBUG })
 export default class NpmPlugin {
 
-  @Autocmd('BufEnter', {
-    sync: false,
-    pattern: 'package.json',
-    eval: 'expand("<afile>:p")'
-  })
-  async onFileEnter(file) {
-    let content = await pify(fs.readFile)(path.join(dir, 'package.json'), 'utf8')
-    let obj = JSON.parse(content)
-    let o = obj['dependencies'] || {}
-    Object.keys(obj['devDependencies'] || {}).forEach(key => {
-      o[key] = obj['devDependencies'][key]
-    })
-    // TODO insert into sql
-  }
-
   async findDirectory() {
     let p = await this.nvim.eval('getcwd()')
     while(true) {
