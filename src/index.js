@@ -10,9 +10,12 @@ export default class NpmPlugin {
     let p = await this.nvim.eval('getcwd()')
     while(true) {
       if (!p || p == '/') break
-      let stat = await pify(fs.stat)(path.join(p, 'package.json'))
-      if (stat.isFile()) {
-        return p
+      try {
+        let stat = await pify(fs.stat)(path.join(p, 'package.json'))
+        if (stat.isFile()) {
+          return p
+        }
+      } catch (e) {
       }
       p = path.dirname(p)
     }
