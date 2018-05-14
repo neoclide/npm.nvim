@@ -35,7 +35,7 @@ function! npm#run(cmd, cwd, callback, auto_close)
   return bufnr
 endfunction
 
-function! s:onData(...) dict
+function! s:onData(id, data, event) dict
   let tid = get(s:timer_map, self.cmd, 0)
   if tid | call timer_stop(tid) | endif
   let nr = self.buffer_nr

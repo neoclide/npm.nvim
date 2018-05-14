@@ -3,7 +3,7 @@ import pify from 'pify'
 import fs from 'fs'
 import path from 'path'
 
-@Plugin({ dev: !!process.env.NVIM_NODE_HOST_DEBUG })
+@Plugin({ dev: false })
 export default class NpmPlugin {
 
   async findDirectory() {
