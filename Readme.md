@@ -35,6 +35,6 @@ since denite doesn't support custom kind in separate plugins.
 
 Take [vim-plug](https://github.com/junegunn/vim-plug) for example:
 
-    Plug 'neoclide/npm.nvim' {'do' : 'npm install'}
+    Plug 'neoclide/npm.nvim', {'do' : 'npm install'}
 
 Run command `:UpdateRemotePlugins` to regist this remote plugin if needed.
