@@ -21,7 +21,7 @@ class Kind(Base):
 
     def action_open(self, context):
         target = context['targets'][0]
-        self.vim.command('Denite file_rec:%s' % target['action__path'])
+        self.vim.command('Denite file/rec:%s' % target['action__path'])
 
     def action_tabopen(self, context):
         target = context['targets'][0]
